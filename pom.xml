@@ -1,43 +1,62 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion> 
-  <parent>
-    <groupId>com.fasterxml</groupId>
-    <artifactId>oss-parent</artifactId>
-    <version>11</version>
-  </parent>
-  <groupId>com.fasterxml.jackson.datatype</groupId>
-  <artifactId>jackson-datatype-hibernate-parent</artifactId>
-  <name>Hibernate module parent</name>
-  <version>2.2.3</version>
-  <packaging>pom</packaging>
-  <description>Parent pom for shared settings for project sub-modules
-  </description>
+    <modelVersion>4.0.0</modelVersion> 
+    <parent>
+        <groupId>com.fasterxml</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>11</version>
+    </parent>
+    <groupId>com.fasterxml.jackson.datatype</groupId>
+    <artifactId>jackson-datatype-hibernate-parent</artifactId>
+    <name>Hibernate module parent</name>
+    <version>2.2.3</version>
+    <packaging>pom</packaging>
+    <description>Parent pom for shared settings for project sub-modules
+    </description>
 
-  <modules>
-    <module>hibernate3</module>
-    <module>hibernate4</module>
-  </modules>
+    <modules>
+        <module>hibernate3</module>
+        <module>hibernate4</module>
+    </modules>
 
-  <url>https://github.com/FasterXML/jackson-module-hibernate</url>
-  <scm>
-    <connection>scm:git:git@github.com:FasterXML/jackson-module-hibernate.git</connection>
-    <developerConnection>scm:git:git@github.com:FasterXML/jackson-module-hibernate.git</developerConnection>
-    <url>http://github.com/FasterXML/jackson-module-hibernate</url>    
-    <tag>jackson-datatype-hibernate-parent-2.2.3</tag>
-  </scm>
+    <url>https://github.com/FasterXML/jackson-module-hibernate</url>
+    <!--scm>
+      <connection>scm:git:git@github.com:FasterXML/jackson-module-hibernate.git</connection>
+      <developerConnection>scm:git:git@github.com:FasterXML/jackson-module-hibernate.git</developerConnection>
+      <url>http://github.com/FasterXML/jackson-module-hibernate</url>    
+      <tag>jackson-datatype-hibernate-parent-2.2.3</tag>
+    </scm-->
+  
+    <distributionManagement>
+        <repository>
+            <id>master.xdevel.ru</id>
+            <name>XDevel Master</name>
+            <url>http://master.xdevel.ru:8080/nexus/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>master.xdevel.ru</id>
+            <name>XDevel Master</name>
+            <url>http://master.xdevel.ru:8080/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+    <scm>
+        <connection>scm:git:ssh://master.xdevel.ru/home/qasta/git/jackson-datatype-hibernate</connection>
+        <developerConnection>scm:git:ssh://master.xdevel.ru/home/qasta/git/jackson-datatype-hibernate</developerConnection>
+        <url>scm:git:ssh://master.xdevel.ru/home/qasta/git/jackson-datatype-hibernate</url>
+        <tag>HEAD</tag>
+    </scm>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <version.jackson>2.2.3</version.jackson>
-  </properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <version.jackson>2.2.3</version.jackson>
+    </properties>
 
-  <dependencies>
-     <!-- for testing, JUnit is needed -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.8.2</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <!-- for testing, JUnit is needed -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

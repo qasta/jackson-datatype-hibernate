@@ -11,21 +11,23 @@ public class HibernateSerializers extends Serializers.Base
     protected final boolean _forceLoading;
     protected final boolean _serializeIdentifiers;
     protected final Mapping _mapping;
+    protected final boolean _forceLoadingForElementCollection;
 
     public HibernateSerializers(boolean forceLoading)
     {
-        this(forceLoading, false, null);
+        this(forceLoading, false, forceLoading, null);
     }
 
     public HibernateSerializers(boolean forceLoading, boolean serializeIdentifiers)
     {
-        this(forceLoading, serializeIdentifiers, null);
+        this(forceLoading, serializeIdentifiers, forceLoading, null);
     }
 
-    public HibernateSerializers(boolean forceLoading, boolean serializeIdentifiers, Mapping mapping)
+    public HibernateSerializers(boolean forceLoading, boolean forceLoadingElementCollection, boolean serializeIdentifiers, Mapping mapping)
     {
         _forceLoading = forceLoading;
         _serializeIdentifiers = serializeIdentifiers;
+        _forceLoadingForElementCollection = forceLoadingElementCollection;
         _mapping = mapping;
     }
 
@@ -35,7 +37,7 @@ public class HibernateSerializers extends Serializers.Base
     {
         Class<?> raw = type.getRawClass();
         if (HibernateProxy.class.isAssignableFrom(raw)) {
-            return new HibernateProxySerializer(_forceLoading, _serializeIdentifiers, _mapping);
+            return new HibernateProxySerializer(_forceLoading, _forceLoadingForElementCollection, _serializeIdentifiers, _mapping);
         }
         return null;
     }

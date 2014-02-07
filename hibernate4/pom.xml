@@ -8,6 +8,7 @@
   <artifactId>jackson-datatype-hibernate4</artifactId>
   <name>Jackson-datatype-Hibernate4</name>
   <packaging>jar</packaging>
+  <version>2.2.3-xdevel-2</version>
   <description>Add-on module for Jackson (http://jackson.codehaus.org) to support
 Hibernate (http://hibernate.org) version 4.x data types.
   </description>
@@ -107,4 +108,8 @@ Hibernate (http://hibernate.org) version 4.x data types.
       </plugin>
     </plugins>
   </build>
+
+  <scm>
+    <tag>jackson-datatype-hibernate4-2.2.3-xdevel-1</tag>
+  </scm>
 </project>

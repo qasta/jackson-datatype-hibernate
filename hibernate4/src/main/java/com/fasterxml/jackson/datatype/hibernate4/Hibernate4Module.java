@@ -34,7 +34,12 @@ public class Hibernate4Module extends Module
 	     * <p>
 	     * Default value is false
 	     */
-        SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS(false)        
+        SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS(false),
+        
+        /**
+         * Forces loading for lazy-loaded fields annotated with @ElementCollection
+         */
+        FORCE_LAZY_LOADING_FOR_ELEMENT_COLLECTION(false)
         ;
 
         final boolean _defaultState;
@@ -107,8 +112,9 @@ public class Hibernate4Module extends Module
             context.appendAnnotationIntrospector(ai);
         }
         boolean forceLoading = isEnabled(Feature.FORCE_LAZY_LOADING);
-        context.addSerializers(new HibernateSerializers(forceLoading, isEnabled(Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS), _mapping));
-        context.addBeanSerializerModifier(new HibernateSerializerModifier(forceLoading));
+        boolean forceLoadingEC = isEnabled(Feature.FORCE_LAZY_LOADING_FOR_ELEMENT_COLLECTION);
+        context.addSerializers(new HibernateSerializers(forceLoading, forceLoadingEC, isEnabled(Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS), _mapping));
+        context.addBeanSerializerModifier(new HibernateSerializerModifier(forceLoading, forceLoadingEC));
     }
 
     /**

@@ -16,6 +16,7 @@ import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.*;
+import javax.persistence.ElementCollection;
 
 /**
  * Wrapper serializer used to handle aspects of lazy loading that can be used
@@ -30,6 +31,8 @@ public class PersistentCollectionSerializer
      * Whether loading of values is forced for lazy references.
      */
     protected final boolean _forceLazyLoading;
+    
+    protected final boolean _forceLoadingElementCollection;
 
     /**
      * Serializer that does actual value serialization when value
@@ -45,9 +48,11 @@ public class PersistentCollectionSerializer
 
     @SuppressWarnings("unchecked")
     public PersistentCollectionSerializer(boolean forceLazyLoading,
+            boolean forceLoadingElementCollection,
             JsonSerializer<?> serializer)
     {
         _forceLazyLoading = forceLazyLoading;
+        _forceLoadingElementCollection = forceLoadingElementCollection;
         _serializer = (JsonSerializer<Object>) serializer;
     }
 
@@ -62,7 +67,9 @@ public class PersistentCollectionSerializer
         throws JsonMappingException
     {
         // If we use eager loading, or force it, can just return underlying serializer as is
-        if (_forceLazyLoading || !usesLazyLoading(property)) {
+        // or this is @ElementCollection and we force its loading
+        boolean _forceThisECLL = _forceLoadingElementCollection && isElementCollection(property);
+        if (_forceLazyLoading || _forceThisECLL || !usesLazyLoading(property)) {
             if (_serializer instanceof ContextualSerializer) {
                 return ((ContextualSerializer) _serializer).createContextual(provider, property);
             }
@@ -85,7 +92,7 @@ public class PersistentCollectionSerializer
         if (value instanceof PersistentCollection) {
             PersistentCollection coll = (PersistentCollection) value;
             // If lazy-loaded, not yet loaded, may serialize as null?
-            if (!_forceLazyLoading && !coll.wasInitialized()) {
+            if (!_forceLazyLoading && !_forceLoadingElementCollection && !coll.wasInitialized()) {
                 provider.defaultSerializeNull(jgen);
                 return;
             }
@@ -108,7 +115,7 @@ public class PersistentCollectionSerializer
     {
         if (value instanceof PersistentCollection) {
             PersistentCollection coll = (PersistentCollection) value;
-            if (!_forceLazyLoading && !coll.wasInitialized()) {
+            if (!_forceLazyLoading && !_forceLoadingElementCollection && !coll.wasInitialized()) {
                 provider.defaultSerializeNull(jgen);
                 return;
             }
@@ -153,7 +160,19 @@ public class PersistentCollectionSerializer
             if (ann4 != null) {
                 return (ann4.fetch() == FetchType.LAZY);
             }
+            ElementCollection ann5 = property.getAnnotation(ElementCollection.class);
+            if (ann5 != null) {
+                return (ann5.fetch() == FetchType.LAZY);
+            }
         }
         return false;
+    }
+    
+    public boolean isElementCollection(BeanProperty property) {
+        if (property == null) {
+            return false;
+        }
+        ElementCollection ann = property.getAnnotation(ElementCollection.class);
+        return ann != null;
     }
 }

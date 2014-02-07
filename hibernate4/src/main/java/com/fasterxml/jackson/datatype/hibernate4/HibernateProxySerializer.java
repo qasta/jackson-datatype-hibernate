@@ -32,6 +32,7 @@ public class HibernateProxySerializer
     protected final BeanProperty _property;
 
     protected final boolean _forceLazyLoading;
+    protected final boolean _forceLazuLoadingElementCollection;
     protected final boolean _serializeIdentifier;
     protected final Mapping _mapping;
 
@@ -49,15 +50,16 @@ public class HibernateProxySerializer
 
     public HibernateProxySerializer(boolean forceLazyLoading)
     {
-        this(forceLazyLoading, false, null);
+        this(forceLazyLoading, forceLazyLoading, false, null);
     }
 
     public HibernateProxySerializer(boolean forceLazyLoading, boolean serializeIdentifier) {
-        this(forceLazyLoading, serializeIdentifier, null);
+        this(forceLazyLoading, forceLazyLoading, serializeIdentifier, null);
     }
 
-    public HibernateProxySerializer(boolean forceLazyLoading, boolean serializeIdentifier, Mapping mapping) {
+    public HibernateProxySerializer(boolean forceLazyLoading, boolean forceLazuLoadingElementCollection, boolean serializeIdentifier, Mapping mapping) {
         _forceLazyLoading = forceLazyLoading;
+        _forceLazuLoadingElementCollection = forceLazuLoadingElementCollection;
         _serializeIdentifier = serializeIdentifier;
         _mapping = mapping;
         _dynamicSerializers = PropertySerializerMap.emptyMap();
